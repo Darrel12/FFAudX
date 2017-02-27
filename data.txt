@@ -1,0 +1,2 @@
+/home/holtd/ffaudx/.git
+/home/holtd/Downloads/

@@ -1,0 +1,7 @@
+# ignore PyCharm files
+.idea/
+*.mp3
+/__pycache__
+
+#ignore commit notes (used for commits with a large message)
+commit_notes.txt
