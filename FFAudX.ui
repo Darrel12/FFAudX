@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>431</width>
-    <height>278</height>
+    <width>419</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,34 +15,21 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../../Downloads/d/ffmpeg-logo_400x400.png</normaloff>../../../Downloads/d/ffmpeg-logo_400x400.png</iconset>
+    <normaloff>../Downloads/d/ffmpeg-logo_400x400.png</normaloff>../Downloads/d/ffmpeg-logo_400x400.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QFrame" name="frame">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QListView" name="listView">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>211</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::DragDrop</enum>
-       </property>
-       <property name="defaultDropAction">
-        <enum>Qt::LinkAction</enum>
-       </property>
-      </widget>
       <widget class="QWidget" name="horizontalLayoutWidget_2">
        <property name="geometry">
         <rect>
@@ -52,16 +39,19 @@
          <height>41</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <layout class="QHBoxLayout" name="layout_audio">
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
         <item>
-         <widget class="QCheckBox" name="checkBox">
+         <widget class="QCheckBox" name="chk_audio">
           <property name="text">
            <string>Audio</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox">
+         <widget class="QComboBox" name="combo_audio">
           <item>
            <property name="text">
             <string>mp3</string>
@@ -100,16 +90,22 @@
          <height>41</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <layout class="QHBoxLayout" name="layout_video">
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QCheckBox" name="checkBox_2">
+         <widget class="QCheckBox" name="chk_video">
           <property name="text">
            <string>Video</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_2">
+         <widget class="QComboBox" name="combo_video">
           <item>
            <property name="text">
             <string>mp4</string>
@@ -143,23 +139,23 @@
        <property name="geometry">
         <rect>
          <x>230</x>
-         <y>141</y>
+         <y>150</y>
          <width>171</width>
          <height>71</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="layout_save_progress">
         <item>
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="txt_save">
           <property name="text">
            <string>Save Destination...</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QProgressBar" name="progressBar">
+         <widget class="QProgressBar" name="progress_bar">
           <property name="value">
-           <number>24</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -170,12 +166,22 @@
         <rect>
          <x>270</x>
          <y>20</y>
-         <width>99</width>
-         <height>27</height>
+         <width>91</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="text">
         <string>Convert</string>
+       </property>
+      </widget>
+      <widget class="MyListWidget" name="queue_list">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>211</width>
+         <height>201</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -187,13 +193,20 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>431</width>
+     <width>419</width>
      <height>25</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyListWidget</class>
+   <extends>QListWidget</extends>
+   <header location="global">MyListWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
