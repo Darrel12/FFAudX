@@ -1,4 +1,5 @@
 from PyQt4.QtGui import QAbstractItemView, QFrame, QListWidget, QListWidgetItem
+from PyQt4.QtCore import Qt
 import os
 from mimetypes import MimeTypes
 from urllib import request
@@ -75,3 +76,13 @@ class MyListWidget(QListWidget):
         else:
             # default internal drop
             super(MyListWidget, self).dropEvent(event)
+
+    # make the delete key remove the selected item in the queue_list
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Delete:
+            self._del_item()
+
+    # remove the selected item
+    def _del_item(self):
+        for item in self.selectedItems():
+            self.takeItem(self.row(item))

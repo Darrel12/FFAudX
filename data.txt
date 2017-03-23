@@ -1,2 +1,2 @@
-/home/holtd/ffaudx/.git
-/home/holtd/Downloads/
+/home/holtd/ffaudx/.git/hooks
+/home/holtd/ffaudx/

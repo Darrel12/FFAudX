@@ -31,7 +31,6 @@ for name in dir(QtGui):
 form_class = uic.loadUiType("FFAudX.ui")[0]
 
 
-
 # Subclass the main window #
 class MyWindowClass(QMainWindow, form_class):
     # variables global to this class
@@ -43,7 +42,7 @@ class MyWindowClass(QMainWindow, form_class):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # bind this subclassed code based UI to the actual UI made with Qt Designer 4
+        # bind this subclassed code  based UI to the actual UI made with Qt Designer 4
         self.ui = Ui_MainWindow()
         self.setupUi(self)
 
@@ -103,12 +102,17 @@ class MyWindowClass(QMainWindow, form_class):
     def menu_item_add_clicked(self):
         root = tk.Tk()
         root.withdraw()
-        file_path = filedialog.askopenfilename(initialdir=sd.initLoadDir)
-        if type(file_path) == str:
-            newItem = MyListWidgetItem(file_path, sd.initLoadDir)
-            self.queue_list.addItem(newItem)
-            self.queue_list.item(0).setText(newItem.getData())
-            sd.updateUserData(loadDir=newItem.path)
+        file_path = filedialog.askopenfilenames(initialdir=sd.initLoadDir)
+        print(type(file_path), file_path)
+        if type(file_path) == tuple:
+            for item in file_path:
+                if item != "":
+                    newItem = MyListWidgetItem(item, sd.initLoadDir)
+                    self.queue_list.addItem(newItem)
+                    print(self.queue_list.count())
+                    self.queue_list.item(self.queue_list.count()-1).setText(newItem.getData())
+                    sd.updateUserData(loadDir=newItem.path)
+
 
     def txt_save_clicked(self):
         root = tk.Tk()
