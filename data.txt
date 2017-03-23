@@ -1,2 +1,4 @@
-/home/holtd/ffaudx/.git/hooks
+/home/holtd/ffaudx/.git
 /home/holtd/ffaudx/
+mov
+wav

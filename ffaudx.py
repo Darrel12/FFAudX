@@ -49,8 +49,16 @@ class MyWindowClass(QMainWindow, form_class):
         # Window is fixed size
         self.setFixedSize(self.size())
 
-        # load defaults for the user if they exist
-        self.txt_save.setText(sd.updateUserData())
+        # extract existing defaults
+        save, vid, aud = sd.updateUserData()
+        # load default save directory
+        self.txt_save.setText(save)
+        # find and load the saved video format
+        i = self.combo_video.findText(vid, Qt.MatchFixedString)
+        self.combo_video.setCurrentIndex(i)
+        # find and load the saved audio format
+        i = self.combo_audio.findText(aud, Qt.MatchFixedString)
+        self.combo_audio.setCurrentIndex(i)
 
         # Bind standard event handlers - if the function being bound to has user-defined parameters you must use lambda as shown below
         self.btn_convert.clicked.connect(lambda: self.btn_convert_clicked(self.fName, self.videoStatus, self.audioStatus))
@@ -129,12 +137,14 @@ class MyWindowClass(QMainWindow, form_class):
 
     def chk_video_checked(self):
         if self.chk_video.isChecked():
+            sd.updateUserData(vidFmt=self.combo_video.currentText())
             self.videoStatus = "Video: " + str(self.queue_list.item(0).getFileType()) + " to " + self.combo_video.currentText()
         else:
             self.videoStatus = "Video: none"
 
     def chk_audio_checked(self):
         if self.chk_audio.isChecked():
+            sd.updateUserData(audFmt=self.combo_audio.currentText())
             self.audioStatus = "Audio: " + "<insert previous format here>" + " to " + self.combo_audio.currentText()
         else:
             self.audioStatus = "Audio: none"
