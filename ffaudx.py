@@ -1,3 +1,4 @@
+#/usr/bin/python3
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.QtCore import *
@@ -138,6 +139,29 @@ class MyWindowClass(QMainWindow, form_class):
     def btn_convert_clicked(self, fName, videoStatus, audioStatus):
         print("---Items in Conversion Queue---")
         print([str(self.queue_list.item(i).text()) for i in range(self.queue_list.count())])
+
+
+        in_file_names = {}
+        out_file_names = {}
+        for index in range(self.queue_list.count()):
+            # get the queue_list item at index
+            item = self.queue_list.item(index)
+
+            in_file_names[item.absFilePath] = None
+            # video and audio can be converted to video
+            # so if the user has the video format set, make a video
+            # otherwise make it audio
+            if item.video != "":
+                out_file_names[sd.initSaveDir + "/" + item.no_extension + "." + item.video] = None
+            else:
+                out_file_names[sd.initSaveDir + "/" + item.no_extension + "." + item.audio] = None
+
+        try:
+            ff = ffmpy.FFmpeg(inputs=in_file_names, outputs=out_file_names)
+            ff.run()
+        except:
+            print("ERROR")
+
         self.statusBar().showMessage("Converting {} - {} and {}".format(fName, videoStatus, audioStatus))
 
     # when the user checks the video box it saves the format as default

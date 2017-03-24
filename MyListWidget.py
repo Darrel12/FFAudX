@@ -18,6 +18,8 @@ class MyListWidgetItem(QListWidgetItem):
         print("directory path: " + self.path)
         # extract the last part of the path to get the file name - this will become a function once we deal with web links
         self.fName = path.split('/')[-1]
+        # file name without the extension
+        self.no_extension = self.fName.split('.')[0]
         # use MimeTypes to determine the file type
         self.fType = identifyItem(path)
         # set the save destination for when the conversion is done
