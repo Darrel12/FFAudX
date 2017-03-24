@@ -22,6 +22,19 @@ class MyListWidgetItem(QListWidgetItem):
         self.fType = identifyItem(path)
         # set the save destination for when the conversion is done
         self.fDest = dest
+        # the audio/video type to convert to if they have one
+        self.audio = ""
+        self.video = ""
+
+    def getAudio(self, audio=""):
+        if audio != "":
+            self.audio = audio
+        return self.audio
+
+    def getVideo(self, video=""):
+        if video != "":
+            self.video = video
+        return self.video
 
     def getFileType(self):
         return self.fType

@@ -64,6 +64,8 @@ class MyWindowClass(QMainWindow, form_class):
         self.btn_convert.clicked.connect(lambda: self.btn_convert_clicked(self.fName, self.videoStatus, self.audioStatus))
         self.chk_video.stateChanged.connect(self.chk_video_checked)
         self.chk_audio.stateChanged.connect(self.chk_audio_checked)
+        self.combo_audio.currentIndexChanged.connect(self.combo_audio_format_changed)
+        self.combo_video.currentIndexChanged.connect(self.combo_video_format_changed)
 
         # bind custom event handlers (such as clickability to non-clickable QObjects)
         clickable(self.txt_save).connect(self.txt_save_clicked)
@@ -74,7 +76,10 @@ class MyWindowClass(QMainWindow, form_class):
                                 QtCore.SIGNAL("customContextMenuRequested(QPoint)"),
                                 self.listItemRightClicked)
 
-
+        # Allow multiple selection on the queue list - ExtendedSelection:
+        # - Shift + click selects additional contiguous segments of items
+        # - Ctrl + click selects additional individual files
+        self.queue_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     # right-click context menu functionality #
     def listItemRightClicked(self, QPos):
@@ -98,9 +103,9 @@ class MyWindowClass(QMainWindow, form_class):
         self.listMenu.move(parentPosition + QPos)
         self.listMenu.show()
 
+    def menu_item_remove_clicked(self):
 
     # remove the highlighted items in the queue #
-    def menu_item_remove_clicked(self):
         for SelectedItem in self.queue_list.selectedItems():
             self.queue_list.takeItem(self.queue_list.row(SelectedItem))
 
@@ -135,20 +140,35 @@ class MyWindowClass(QMainWindow, form_class):
         print([str(self.queue_list.item(i).text()) for i in range(self.queue_list.count())])
         self.statusBar().showMessage("Converting {} - {} and {}".format(fName, videoStatus, audioStatus))
 
+    # when the user checks the video box it saves the format as default
+    # and updates the conversion format of the selected items
     def chk_video_checked(self):
         if self.chk_video.isChecked():
             sd.updateUserData(vidFmt=self.combo_video.currentText())
+            for item in self.queue_list.selectedItems():
+                print(item.getFileType())
+                self.queue_list.item(self.queue_list.row(item)).getVideo(self.combo_video.currentText())
             self.videoStatus = "Video: " + str(self.queue_list.item(0).getFileType()) + " to " + self.combo_video.currentText()
         else:
             self.videoStatus = "Video: none"
 
+    # when the user checks the audio box it saves the format as default
+    # and updates the conversion format of the selected items
     def chk_audio_checked(self):
         if self.chk_audio.isChecked():
             sd.updateUserData(audFmt=self.combo_audio.currentText())
+            for item in self.queue_list.selectedItems():
+                print(item.getFileType())
+                self.queue_list.item(self.queue_list.row(item)).getAudio(self.combo_audio.currentText())
             self.audioStatus = "Audio: " + "<insert previous format here>" + " to " + self.combo_audio.currentText()
         else:
             self.audioStatus = "Audio: none"
 
+    def combo_audio_format_changed(self):
+        sd.updateUserData(audFmt=self.combo_audio.currentText())
+
+    def combo_video_format_changed(self):
+        sd.updateUserData(vidFmt=self.combo_video.currentText())
 
 
 if __name__ == "__main__":
