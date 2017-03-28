@@ -1,4 +1,4 @@
-/home/holtd/ffaudx/.idea
+/home/holtd/ffaudx
 /home/holtd/CodeScouts/pythonScripts/audioStreaming/
 mp4
 mp3

@@ -3,7 +3,7 @@ from PyQt4.QtCore import Qt
 import os
 from mimetypes import MimeTypes
 from urllib import request
-
+from PyQt4 import QtGui, QtCore
 import savedData as sd
 
 
@@ -92,12 +92,21 @@ class MyListWidget(QListWidget):
             # default internal drop
             super(MyListWidget, self).dropEvent(event)
 
-    # make the delete key remove the selected item in the queue_list
+    # Assign functions to keys:
+    #   delete
+    #   ctrl + a
     def keyPressEvent(self, event):
+        modifiers = QtGui.QApplication.keyboardModifiers()
         if event.key() == Qt.Key_Delete:
             self._del_item()
+        elif modifiers == QtCore.Qt.ControlModifier and event.key() == Qt.Key_A:
+            self._highlight_all()
 
     # remove the selected item
     def _del_item(self):
         for item in self.selectedItems():
             self.takeItem(self.row(item))
+
+    # highlight all items in the list
+    def _highlight_all(self):
+        self.selectAll()
