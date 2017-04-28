@@ -1,4 +1,4 @@
 /home/holtd/ffaudx
 /home/holtd/ffaudx/samples/
 wma
-wav
+mp3

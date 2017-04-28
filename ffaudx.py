@@ -34,6 +34,21 @@ form_class = uic.loadUiType("FFAudX.ui")[0]
 
 
 # Subclass the main window #
+def processQueue(queue_list, item_index):
+
+    queue_item = queue_list.item(item_index)
+
+    # update status bar - emit a signal to be handled by GUI
+    # This prevents QPixmap error by not handling UI objects outside the UI class
+    # self.emit(QtCore.SIGNAL('updateStatusBar'), queue_item.fName, queue_item.video, queue_item.audio)
+
+    if 'youtube' in queue_item.fType[0]:
+        print("Scraping:", queue_item.path)
+        scrape(queue_list, queue_item)
+    else:
+        convertItem(queue_list, item_index)
+
+
 class MyWindowClass(QMainWindow):
     # variables global to this class
     fName = "none"
@@ -91,7 +106,7 @@ class MyWindowClass(QMainWindow):
         self.mainThread = QThread()
         self.mainThread.start()
 
-        self.conversion_task = TaskThread(self.processQueue, self.ui.queue_list)
+        self.conversion_task = TaskThread(processQueue, self.ui.queue_list)
         self.conversion_task.moveToThread(self.mainThread)
         self.conversion_task.notifyProgress.connect(self.progressBarGrowth)
         self.conversion_task.revertButton.connect(self.revertButtonText)
@@ -122,6 +137,7 @@ class MyWindowClass(QMainWindow):
         self.ui.progress_bar.setValue(i)
 
     # right-click context menu functionality #
+    # noinspection PyAttributeOutsideInit
     def listItemRightClicked(self, QPos):
         self.listMenu = QtGui.QMenu()
 
@@ -157,10 +173,12 @@ class MyWindowClass(QMainWindow):
         if type(file_path) == tuple:
             for item in file_path:
                 if item:
-                    newItem = MyListWidgetItem(item, sd.initLoadDir)
+                    newItem = MyListWidgetItem(item, sd.initLoadDir,
+                                               self.ui.chk_video.isChecked(), self.ui.combo_video.currentText(),
+                                               self.ui.chk_audio.isChecked(), self.ui.combo_audio.currentText())
                     self.ui.queue_list.addItem(newItem)
                     print(self.ui.queue_list.count())
-                    self.ui.queue_list.item(self.ui.queue_list.count() - 1).setText(newItem.getData())
+                    self.ui.queue_list.item(self.ui.queue_list.count() - 1).setText(newItem.fName)
                     self.ui.queue_list.item(self.ui.queue_list.count() - 1).setSelected(True)
                     sd.updateUserData(loadDir=newItem.path)
 
@@ -179,12 +197,8 @@ class MyWindowClass(QMainWindow):
             sd.updateUserData(vidFmt=self.ui.combo_video.currentText())
             for item in self.ui.queue_list.selectedItems():
                 print("item:", item)
-                print(item.getFileType())
+                print(item.fType)
                 self.ui.queue_list.item(self.ui.queue_list.row(item)).getVideo(self.ui.combo_video.currentText())
-            self.videoStatus = "Video: " + str(self.ui.queue_list.item(0).getFileType())\
-                               + " to " + self.ui.combo_video.currentText()
-        else:
-            self.videoStatus = "Video: none"
 
     # when the user checks the audio box it saves the format as default
     # and updates the conversion format of the selected items
@@ -195,9 +209,6 @@ class MyWindowClass(QMainWindow):
                 print("item:", item)
                 print(item.fType)
                 self.ui.queue_list.item(self.ui.queue_list.row(item)).getAudio(self.ui.combo_audio.currentText())
-            self.audioStatus = "Audio: " + "<insert previous format here>" + " to " + self.ui.combo_audio.currentText()
-        else:
-            self.audioStatus = "Audio: none"
 
     def combo_audio_format_changed(self):
         sd.updateUserData(audFmt=self.ui.combo_audio.currentText())
@@ -205,26 +216,13 @@ class MyWindowClass(QMainWindow):
     def combo_video_format_changed(self):
         sd.updateUserData(vidFmt=self.ui.combo_video.currentText())
 
-
     # currently this makes 1 item dictionaries and processes entries individually -- TODO fix this
-    def processQueue(self, queue_list, item_index):
-
-        queue_item = queue_list.item(item_index)
-
-        # update status bar - emit a signal to be handled by GUI
-        # This prevents QPixmap error by not handling UI objects outside the UI class
-        # self.emit(QtCore.SIGNAL('updateStatusBar'), queue_item.fName, queue_item.video, queue_item.audio)
-
-        if 'youtube' in queue_item.fType[0]:
-            print("Scraping:", queue_item.path)
-            scrape(queue_list, queue_item)
-        else:
-            convertItem(queue_list, item_index)
 
 
 # subclassed QThread to run the conversion and monitor the progress - pretty sure doing this is wrong
 # but at least I'm not using moveToThread()
 class TaskThread(QThread):
+    # signals to emit that will be handled by the GUI
     notifyProgress = pyqtSignal(int)
     revertButton = pyqtSignal(str)
     statusChange = pyqtSignal(str, str, str)
@@ -258,5 +256,4 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     myWindow = MyWindowClass(None)
     myWindow.show()
-
     app.exec_()

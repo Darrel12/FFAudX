@@ -11,7 +11,7 @@ from pprint import pprint
 
 # Customized list widget item to hold more data than just the absolute path of the item #
 class MyListWidgetItem(QListWidgetItem):
-    def __init__(self, path, dest):
+    def __init__(self, path, dest, video_checked=False, video=None, audio_checked=False, audio=None):
         super().__init__()
 
         self.absFilePath = path
@@ -31,9 +31,9 @@ class MyListWidgetItem(QListWidgetItem):
             # set the save destination for when the conversion is done
             self.fDest = dest
             # the audio/video type to convert to if they have one - blank by default
-            # TODO maybe make them the currently checked values? or reset checked values when adding new item?
-            self.audio = ""
-            self.video = ""
+            # TODO maybe make them the currently checked values? and/or reset checked values when adding new item?
+            self.audio = audio if audio_checked else ""
+            self.video = video if video_checked else ""
         else:
             print("Pathhh:", path)
             # TODO put something here? see how this corresponds to the above self.path
@@ -45,8 +45,8 @@ class MyListWidgetItem(QListWidgetItem):
 
             self.fType = ('youtube/video', None)  # save a custom mime-type TODO extract the mime type from the metadata
             self.fDest = dest
-            self.audio = ""
-            self.video = ""
+            self.audio = audio if audio_checked else ""
+            self.video = video if video_checked else ""
             print("fType:", self.fType)
 
     def __repr__(self):
@@ -68,9 +68,6 @@ class MyListWidgetItem(QListWidgetItem):
 
     def getFileType(self):
         return self.fType
-
-    def getData(self):
-        return self.fName
 
 
 # identify the type of item the user is adding to the queue #
@@ -108,6 +105,11 @@ class MyListWidget(QListWidget):
 
     # handle internal and external drag-and-drop actions #
     def dropEvent(self, event):
+        # capture the main windows audio/video configuration to be applied to the next added items
+        video_checked = self.parent().parent().parent().ui.chk_video.isChecked()
+        audio_checked = self.parent().parent().parent().ui.chk_audio.isChecked()
+        video = self.parent().parent().parent().ui.combo_video.currentText()
+        audio = self.parent().parent().parent().ui.combo_audio.currentText()
         # handle external drop
         if event.mimeData().hasUrls():
             for url in event.mimeData().urls():
@@ -115,11 +117,11 @@ class MyListWidget(QListWidget):
                 print(url)
                 path = url.toLocalFile()
                 if os.path.isfile(path):
-                    item = MyListWidgetItem(path, sd.initSaveDir)
+                    item = MyListWidgetItem(path, sd.initSaveDir, video_checked, video, audio_checked, audio)
                     print("local file:", item)
                     self.addItem(item)
                 else:
-                    item = MyListWidgetItem(url.toString(), sd.initSaveDir)
+                    item = MyListWidgetItem(url.toString(), sd.initSaveDir, video_checked, video, audio_checked, audio)
                     print("Youtube Video:", item)
                     self.addItem(item)
                 # make the item display its name
@@ -137,6 +139,8 @@ class MyListWidget(QListWidget):
         ctrl + a   ->   highlight all items in the queue
         :param event: signal event to determine if it's a keyboard event
         """
+        # TODO make arrow keys move selection to above/below item
+        # TODO Ctrl + arrow keys to move the highlighted items priority
         modifiers = QtGui.QApplication.keyboardModifiers()
         if event.key() == Qt.Key_Delete:
             self._del_item()

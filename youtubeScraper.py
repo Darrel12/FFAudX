@@ -105,10 +105,10 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
 
     except ffmpy.FFRuntimeError as ffre:
         print("---Runtime Error---\n",
-              "Command:", ffre.cmd,
-              "Exit Code:", ffre.exit_code,
-              "Standard Out:", ffre.stdout,
-              "Standard Error:", ffre.stderr)
+              "\nCommand:", ffre.cmd,
+              "\nExit Code:", ffre.exit_code,
+              "\nStandard Out:", ffre.stdout,
+              "\nStandard Error:", ffre.stderr)
 
 
 def videoName(link):
