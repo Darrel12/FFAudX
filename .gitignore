@@ -2,6 +2,7 @@
 .idea/
 *.mp3
 /__pycache__
+*.wav
 
 #ignore commit notes (used for commits with a large message)
 commit_notes.txt
