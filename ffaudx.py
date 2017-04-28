@@ -45,7 +45,6 @@ class MyWindowClass(QMainWindow):
         super(MyWindowClass, self).__init__(parent)
 
         # bind this subclassed UI to the actual UI made with Qt Designer 4
-        self.listMenu = QtGui.QMenu()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -124,6 +123,7 @@ class MyWindowClass(QMainWindow):
 
     # right-click context menu functionality #
     def listItemRightClicked(self, QPos):
+        self.listMenu = QtGui.QMenu()
 
         # add menu items for the right-click context menu
         menu_item_add = self.listMenu.addAction("Add Item")
@@ -212,7 +212,7 @@ class MyWindowClass(QMainWindow):
 
         # update status bar - emit a signal to be handled by GUI
         # This prevents QPixmap error by not handling UI objects outside the UI class
-        self.emit(QtCore.SIGNAL('updateStatusBar'), queue_item.fName, queue_item.video, queue_item.audio)
+        # self.emit(QtCore.SIGNAL('updateStatusBar'), queue_item.fName, queue_item.video, queue_item.audio)
 
         if 'youtube' in queue_item.fType[0]:
             print("Scraping:", queue_item.path)

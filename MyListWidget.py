@@ -6,6 +6,7 @@ from urllib import request
 from PyQt4 import QtGui, QtCore
 import savedData as sd
 from pytube import YouTube
+from pprint import pprint
 
 
 # Customized list widget item to hold more data than just the absolute path of the item #
@@ -49,7 +50,11 @@ class MyListWidgetItem(QListWidgetItem):
             print("fType:", self.fType)
 
     def __repr__(self):
-        return self.fName
+        try:
+            return self.fName
+        except Exception as err:
+            print("I think fName is trying to be accessed when it hasn't been created:")
+            pprint(err.args)
 
     def getAudio(self, audio=""):
         if audio != "":
