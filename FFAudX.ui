@@ -30,111 +30,6 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QWidget" name="horizontalLayoutWidget_2">
-       <property name="geometry">
-        <rect>
-         <x>230</x>
-         <y>100</y>
-         <width>171</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="layout_audio">
-        <property name="leftMargin">
-         <number>1</number>
-        </property>
-        <item>
-         <widget class="QCheckBox" name="chk_audio">
-          <property name="text">
-           <string>Audio</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="combo_audio">
-          <item>
-           <property name="text">
-            <string>mp3</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>wav</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>m4a</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ALAC</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>FLAC</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="horizontalLayoutWidget_3">
-       <property name="geometry">
-        <rect>
-         <x>230</x>
-         <y>60</y>
-         <width>171</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="layout_video">
-        <property name="leftMargin">
-         <number>1</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QCheckBox" name="chk_video">
-          <property name="text">
-           <string>Video</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="combo_video">
-          <item>
-           <property name="text">
-            <string>mp4</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>avi</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>wma</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>mov</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>flv</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="verticalLayoutWidget">
        <property name="geometry">
         <rect>
@@ -182,6 +77,108 @@
          <width>211</width>
          <height>201</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="chk_video">
+       <property name="geometry">
+        <rect>
+         <x>232</x>
+         <y>72</y>
+         <width>82</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Video</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="combo_video">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>70</y>
+         <width>81</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <item>
+        <property name="text">
+         <string>mp4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>avi</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>wma</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>mov</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>flv</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QComboBox" name="combo_audio">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>110</y>
+         <width>81</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>mp3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>wav</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>m4a</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ALAC</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>FLAC</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QCheckBox" name="chk_audio">
+       <property name="geometry">
+        <rect>
+         <x>232</x>
+         <y>112</y>
+         <width>82</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Audio</string>
        </property>
       </widget>
      </widget>

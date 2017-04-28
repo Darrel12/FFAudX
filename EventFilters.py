@@ -10,7 +10,7 @@ def clickable(widget):
         def eventFilter(self, obj, event):
 
             if obj == widget:
-                if event.type() == QEvent.MouseButtonDblClick: #  QEvent.MouseButtonRelease:
+                if event.type() == QEvent.MouseButtonDblClick:  # QEvent.MouseButtonRelease:
                     if obj.rect().contains(event.pos()):
                         self.clicked.emit()
                         # The developer can opt for .emit(obj) to get the object within the slot.

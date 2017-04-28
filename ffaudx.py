@@ -6,12 +6,8 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import tkinter as tk
 from tkinter import filedialog
-import ffmpy
 import inspect
 from EventFilters import clickable
-from time import sleep
-
-import savedData as sd
 from MyListWidget import *
 from youtubeScraper import scrape, convertItem
 
@@ -121,7 +117,6 @@ class MyWindowClass(QMainWindow):
             self.mainThread.quit()
             self.mainThread.wait()
 
-
     def progressBarGrowth(self, i):
         self.ui.progress_bar.setValue(i)
 
@@ -175,7 +170,6 @@ class MyWindowClass(QMainWindow):
         if type(save_path) == str:
             self.ui.txt_save.setText(save_path)
             sd.updateUserData(saveDir=self.ui.txt_save.text())
-
 
     # when the user checks the video box it saves the format as default
     # and updates the conversion format of the selected items
@@ -252,6 +246,7 @@ class TaskThread(QThread):
                 self.func(self.queue_list, 0)
                 self.notifyProgress.emit((i+1)/list_count * 100)  # current progress = completed / total jobs
         self.revertButton.emit("Convert")
+        # self.notifyProgress.emit(0)
 
 
 if __name__ == "__main__":
