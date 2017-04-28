@@ -205,8 +205,10 @@ class MyWindowClass(QMainWindow):
     def combo_video_format_changed(self):
         sd.updateUserData(vidFmt=self.ui.combo_video.currentText())
 
+
     # currently this makes 1 item dictionaries and processes entries individually -- TODO fix this
     def processQueue(self, queue_list, item_index):
+        updateStatus = pyqtSignal(str)
 
         queue_item = queue_list.item(item_index)
 

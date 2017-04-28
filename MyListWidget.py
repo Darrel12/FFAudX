@@ -115,7 +115,10 @@ class MyListWidget(QListWidget):
                 print(url)
                 path = url.toLocalFile()
                 if os.path.isfile(path):
-                    self.addItem(MyListWidgetItem(path, sd.initSaveDir).fName)
+                    item = MyListWidgetItem(path, sd.initSaveDir)
+                    self.addItem(item)
+                    self.item(self.count()-1).setText(item.fName)
+                    self.item(self.count()-1).setSelected(True)
                 else:
                     item = MyListWidgetItem(url.toString(), sd.initSaveDir)
                     print("Youtube Video:", item)
