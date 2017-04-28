@@ -116,15 +116,15 @@ class MyListWidget(QListWidget):
                 path = url.toLocalFile()
                 if os.path.isfile(path):
                     item = MyListWidgetItem(path, sd.initSaveDir)
+                    print("local file:", item)
                     self.addItem(item)
-                    self.item(self.count()-1).setText(item.fName)
-                    self.item(self.count()-1).setSelected(True)
                 else:
                     item = MyListWidgetItem(url.toString(), sd.initSaveDir)
                     print("Youtube Video:", item)
                     self.addItem(item)
-                    self.item(self.count()-1).setText(item.fName)
-                    self.item(self.count()-1).setSelected(True)
+                # make the item display its name
+                self.item(self.count() - 1).setText(item.fName)
+                self.item(self.count() - 1).setSelected(True)
         else:
             # default internal drop
             super(MyListWidget, self).dropEvent(event)

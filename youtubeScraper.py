@@ -92,6 +92,7 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
     try:
         # -y option forces overwrite of pre-existing output files - more at https://ffmpeg.org/ffmpeg.html
         # TODO: make this optional?
+        # TODO: want to make m4a work? see http://stackoverflow.com/a/32932092/5812876
         ff = ffmpy.FFmpeg(inputs=in_file_name, outputs=out_file_name, global_options="-y")
         ff.run()
         print("finished item: ", in_file_name)

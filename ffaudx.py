@@ -95,6 +95,7 @@ class MyWindowClass(QMainWindow):
         self.conversion_task.moveToThread(self.mainThread)
         self.conversion_task.notifyProgress.connect(self.progressBarGrowth)
         self.conversion_task.revertButton.connect(self.revertButtonText)
+        self.conversion_task.statusChange.connect(self.updateStatus)
 
         self.connect(self.conversion_task, SIGNAL('updateStatusBar'), self.updateStatus)
 
@@ -104,8 +105,7 @@ class MyWindowClass(QMainWindow):
         self.ui.btn_convert.setText("Convert")
 
     def updateStatus(self, fName, video, audio):
-        self.statusBar().showMessage(
-            "Converting {} - {} and {}".format(fName, video, audio))
+        self.statusBar().showMessage("Converting {} to {}".format(fName, video if video else audio))
 
     def beginConverting(self):
         if self.ui.btn_convert.text() == "Convert":
@@ -208,7 +208,6 @@ class MyWindowClass(QMainWindow):
 
     # currently this makes 1 item dictionaries and processes entries individually -- TODO fix this
     def processQueue(self, queue_list, item_index):
-        updateStatus = pyqtSignal(str)
 
         queue_item = queue_list.item(item_index)
 
@@ -228,6 +227,7 @@ class MyWindowClass(QMainWindow):
 class TaskThread(QThread):
     notifyProgress = pyqtSignal(int)
     revertButton = pyqtSignal(str)
+    statusChange = pyqtSignal(str, str, str)
 
     def __init__(self, func, queue_list):
         super().__init__()
@@ -246,6 +246,8 @@ class TaskThread(QThread):
         list_count = self.queue_list.count()
         for i in range(list_count):
             if self._isRunning:
+                currentItem = self.queue_list.item(0)
+                self.statusChange.emit(currentItem.fName, currentItem.video, currentItem.audio)
                 self.func(self.queue_list, 0)
                 self.notifyProgress.emit((i+1)/list_count * 100)  # current progress = completed / total jobs
         self.revertButton.emit("Convert")

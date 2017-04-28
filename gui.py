@@ -78,8 +78,6 @@ class Ui_MainWindow(object):
         self.combo_audio.addItem(_fromUtf8(""))
         self.combo_audio.addItem(_fromUtf8(""))
         self.combo_audio.addItem(_fromUtf8(""))
-        self.combo_audio.addItem(_fromUtf8(""))
-        self.combo_audio.addItem(_fromUtf8(""))
         self.chk_audio = QtGui.QCheckBox(self.frame)
         self.chk_audio.setGeometry(QtCore.QRect(232, 112, 82, 22))
         self.chk_audio.setObjectName(_fromUtf8("chk_audio"))
@@ -108,9 +106,7 @@ class Ui_MainWindow(object):
         self.combo_video.setItemText(4, _translate("MainWindow", "flv", None))
         self.combo_audio.setItemText(0, _translate("MainWindow", "mp3", None))
         self.combo_audio.setItemText(1, _translate("MainWindow", "wav", None))
-        self.combo_audio.setItemText(2, _translate("MainWindow", "m4a", None))
-        self.combo_audio.setItemText(3, _translate("MainWindow", "ALAC", None))
-        self.combo_audio.setItemText(4, _translate("MainWindow", "FLAC", None))
+        self.combo_audio.setItemText(2, _translate("MainWindow", "FLAC", None))
         self.chk_audio.setText(_translate("MainWindow", "Audio", None))
 
 from MyListWidget import MyListWidget

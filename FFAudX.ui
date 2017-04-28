@@ -154,16 +154,6 @@
        </item>
        <item>
         <property name="text">
-         <string>m4a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ALAC</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>FLAC</string>
         </property>
        </item>
