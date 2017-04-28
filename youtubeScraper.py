@@ -128,7 +128,7 @@ def scrape(queue_list, item):
         else:
             filtered = filtered[-1]  # take the last item (highest resolution)
             video = yt.get(filtered.extension, filtered.resolution)
-            video.download(item.fDest)
+            video.download(item.fDest, force_overwrite=True)
 
 
 def getHighestResolution(yt, item):
@@ -139,7 +139,7 @@ def getHighestResolution(yt, item):
         if yt.filter(resolution=res):
             video = yt.filter(resolution=res)[-1]
             video = yt.get(video.extension, video.resolution)
-            video.download(item.fDest)
+            video.download(item.fDest, force_overwrite=True)
             return item.fDest + "/" +  yt.filename + "." + video.extension
 
 
@@ -176,7 +176,7 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
         ff.run()
         print("finished item: ", in_file_name)
         if delete_after_download:
-            remove(youtube_item_path)
+            remove(youtube_item_path)  # removes the video from your hard drive after converting to the preferred format
         queue_list.takeItem(item_index)
 
     except ffmpy.FFExecutableNotFoundError as ffenf:

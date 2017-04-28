@@ -109,6 +109,7 @@ class MyWindowClass(QMainWindow):
 
     def beginConverting(self):
         if self.ui.btn_convert.text() == "Convert":
+            self.ui.progress_bar.setValue(0)
             self.conversion_task.start()
             self.ui.btn_convert.setText("Cancel")
         else:
