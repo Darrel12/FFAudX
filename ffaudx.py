@@ -68,7 +68,6 @@ class MyWindowClass(QMainWindow):
         # Bind standard event handlers
         # if the function being bound to has user-defined parameters you must use lambda:
         # ex - lambda: self.btn_convert_clicked(self.fName, self.videoStatus, self.audioStatus)
-        self.ui.btn_convert.clicked.connect(self.btn_convert_clicked)
         self.ui.btn_convert.clicked.connect(self.beginConverting)
         self.ui.chk_video.stateChanged.connect(self.chk_video_checked)
         self.ui.chk_audio.stateChanged.connect(self.chk_audio_checked)
@@ -94,7 +93,11 @@ class MyWindowClass(QMainWindow):
         # self.conversion_task = TaskThreadObject(self.processQueue, self.ui.queue_list)
         # self.conversion_task.progress.connect(self.onProgress)
 
+        self.mainThread = QThread()
+        self.mainThread.start()
+
         self.conversion_task = TaskThread(self.processQueue, self.ui.queue_list)
+        self.conversion_task.moveToThread(self.mainThread)
         self.conversion_task.notifyProgress.connect(self.progressBarGrowth)
 
         self.connect(self.conversion_task, SIGNAL('updateStatusBar'), self.updateStatus)
@@ -106,7 +109,15 @@ class MyWindowClass(QMainWindow):
             "Converting {} - {} and {}".format(fName, video, audio))
 
     def beginConverting(self):
-        self.conversion_task.start()
+        if self.ui.btn_convert.text() == "Convert":
+            self.conversion_task.start()
+            self.ui.btn_convert.setText("Cancel")
+        else:
+            self.ui.btn_convert.setText("Convert")
+            self.conversion_task.stop()
+            self.mainThread.quit()
+            self.mainThread.wait()
+
 
     def progressBarGrowth(self, i):
         self.ui.progress_bar.setValue(i)
@@ -159,12 +170,9 @@ class MyWindowClass(QMainWindow):
         root.withdraw()
         save_path = filedialog.askdirectory(initialdir=sd.initSaveDir)
         if type(save_path) == str:
-            self.txt_save.setText(save_path)
-            sd.updateUserData(saveDir=self.txt_save.text())
+            self.ui.txt_save.setText(save_path)
+            sd.updateUserData(saveDir=self.ui.txt_save.text())
 
-    def btn_convert_clicked(self):
-        print("---Items in Conversion Queue---")
-        print([str(self.ui.queue_list.item(i).text()) for i in range(self.ui.queue_list.count())])
 
     # when the user checks the video box it saves the format as default
     # and updates the conversion format of the selected items
@@ -224,6 +232,10 @@ class TaskThread(QThread):
         super().__init__()
         self.func = func
         self.queue_list = queue_list
+        self._isRunning = True
+
+    def stop(self):
+        self._isRunning = False
 
     def run(self):
         """
@@ -232,8 +244,9 @@ class TaskThread(QThread):
         """
         list_count = self.queue_list.count()
         for i in range(list_count):
-            self.func(self.queue_list, 0)
-            self.notifyProgress.emit((i+1)/list_count * 100)  # current progress = completed / total jobs
+            if self._isRunning:
+                self.func(self.queue_list, 0)
+                self.notifyProgress.emit((i+1)/list_count * 100)  # current progress = completed / total jobs
 
 
 

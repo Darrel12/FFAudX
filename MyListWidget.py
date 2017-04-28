@@ -117,6 +117,7 @@ class MyListWidget(QListWidget):
                     print("Youtube Video:", item)
                     self.addItem(item)
                     self.item(self.count()-1).setText(item.fName)
+                    self.item(self.count()-1).setSelected(True)
         else:
             # default internal drop
             super(MyListWidget, self).dropEvent(event)
