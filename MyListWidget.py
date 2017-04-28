@@ -7,8 +7,6 @@ from PyQt4 import QtGui, QtCore
 import savedData as sd
 from pytube import YouTube
 
-from youtubeScraper import videoName
-
 
 # Customized list widget item to hold more data than just the absolute path of the item #
 class MyListWidgetItem(QListWidgetItem):
@@ -31,7 +29,8 @@ class MyListWidgetItem(QListWidgetItem):
             self.fType = identifyItem(path)
             # set the save destination for when the conversion is done
             self.fDest = dest
-            # the audio/video type to convert to if they have one - blank by default TODO maybe make them the currently checked values? or reset checked values when adding new item?
+            # the audio/video type to convert to if they have one - blank by default
+            # TODO maybe make them the currently checked values? or reset checked values when adding new item?
             self.audio = ""
             self.video = ""
         else:
@@ -122,10 +121,14 @@ class MyListWidget(QListWidget):
             # default internal drop
             super(MyListWidget, self).dropEvent(event)
 
-    # Assign functions to keys:
-    #   delete
-    #   ctrl + a
+    # noinspection PyArgumentList
     def keyPressEvent(self, event):
+        """
+        Assign the following functions to keystrokes
+        delete     ->   delete the highlighted items
+        ctrl + a   ->   highlight all items in the queue
+        :param event: signal event to determine if it's a keyboard event
+        """
         modifiers = QtGui.QApplication.keyboardModifiers()
         if event.key() == Qt.Key_Delete:
             self._del_item()

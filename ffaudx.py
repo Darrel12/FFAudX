@@ -45,6 +45,7 @@ class MyWindowClass(QMainWindow):
         super(MyWindowClass, self).__init__(parent)
 
         # bind this subclassed UI to the actual UI made with Qt Designer 4
+        self.listMenu = QtGui.QMenu()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -123,7 +124,6 @@ class MyWindowClass(QMainWindow):
 
     # right-click context menu functionality #
     def listItemRightClicked(self, QPos):
-        self.listMenu = QtGui.QMenu()
 
         # add menu items for the right-click context menu
         menu_item_add = self.listMenu.addAction("Add Item")

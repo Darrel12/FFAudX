@@ -59,15 +59,14 @@ def stuff():
     # To select a video by a specific resolution and filetype you can use the get
     # method.
 
-    video = yt.get('mp4', '720p')
+    # video = yt.get('mp4', '720p') #
 
     # NOTE: get() can only be used if and only if one object matches your criteria.
     # for example:
 
     print(yt.get_videos())
 
-
-    #[<video: mpeg-4="" visual="" (.3gp)="" -="" 144p="">,
+    # [<video: mpeg-4="" visual="" (.3gp)="" -="" 144p="">,
     # <video: mpeg-4="" visual="" (.3gp)="" -="" 240p="">,
     # <video: sorenson="" h.263="" (.flv)="" -="" 240p="">,
     # <video: h.264="" (.flv)="" -="" 360p="">,
@@ -94,53 +93,56 @@ def scrape(queue_list, item):
     """
     Download the desired video with the chosen extension.
     If the desired extension doesn't exist, download the highest resolution.
+    :param queue_list: the list to be modified after scraping
     :param item: queue object
     """
-    yt = item.yt
-    # print("-------- VIDEO FORMATS --------")
-    # pprint(yt.get_videos())
-    # print()
-    # pprint(yt.filter(extension=item.video))
+    try:
+        yt = item.yt
 
-    # TODO do this audio stuff
-    # if the user chose an audio format:
-    # Get any video resolution and extract
-    # the audio and convert to the desired format
-    if item.audio:
-        yt_path = getHighestResolution(yt, item)
-        convertItem(queue_list, queue_list.row(item), delete_after_download=True, youtube_item_path=yt_path)
-        return
-
-
-    # The user didn't choose an audio format:
-    # This means they want video, check if the user
-    # chose a video format and download it.
-    # Otherwise, download the highest resolution available
-    if not item.video:
-        getHighestResolution(yt, item)
-    else:
-        filtered = yt.filter(extension=item.video)
-        # If the chosen video format doesn't already exist
-        # then download the highest resolution and convert it
-        if not filtered:
+        # if the user chose an audio format:
+        # Get any video resolution and extract
+        # the audio and convert to the desired format
+        if item.audio:
             yt_path = getHighestResolution(yt, item)
             convertItem(queue_list, queue_list.row(item), delete_after_download=True, youtube_item_path=yt_path)
+            return
+
+        # The user didn't choose an audio format:
+        # This means they want video, check if the user
+        # chose a video format and download it.
+        # Otherwise, download the highest resolution available
+        if not item.video:
+            getHighestResolution(yt, item)
         else:
-            filtered = filtered[-1]  # take the last item (highest resolution)
-            video = yt.get(filtered.extension, filtered.resolution)
-            video.download(item.fDest, force_overwrite=True)
+            filtered = yt.filter(extension=item.video)
+            # If the chosen video format doesn't already exist
+            # then download the highest resolution and convert it
+            if not filtered:
+                yt_path = getHighestResolution(yt, item)
+                convertItem(queue_list, queue_list.row(item), delete_after_download=True, youtube_item_path=yt_path)
+            else:
+                filtered = filtered[-1]  # take the last item (highest resolution)
+                video = yt.get(filtered.extension, filtered.resolution)
+                video.download(item.fDest, force_overwrite=True)
+    except Exception as some_exception:
+        print("There was an exception when trying to scrape:")
+        pprint(some_exception.args)
 
 
 def getHighestResolution(yt, item):
     resolutions = ["1080p", "720p", "480p", "360p", "240p", "144p"]
     # if the user didn't choose a format, iterate over resolutions
     # from high to low to get the highest quality video
-    for res in resolutions:
-        if yt.filter(resolution=res):
-            video = yt.filter(resolution=res)[-1]
-            video = yt.get(video.extension, video.resolution)
-            video.download(item.fDest, force_overwrite=True)
-            return item.fDest + "/" +  yt.filename + "." + video.extension
+    try:
+        for res in resolutions:
+            if yt.filter(resolution=res):
+                video = yt.filter(resolution=res)[-1]
+                video = yt.get(video.extension, video.resolution)
+                video.download(item.fDest, force_overwrite=True)
+                return item.fDest + "/" + yt.filename + "." + video.extension
+    except Exception as some_exception:
+        print("There was an exception when trying to download the highest resolution video:")
+        pprint(some_exception.args)
 
 
 def convertItem(queue_list, item_index, delete_after_download=False, youtube_item_path=None):
@@ -150,6 +152,7 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
     :param queue_list: Custom QListWidget object holding customized QListWidgetItems
     :param item_index: index of the item in the queue_list to be converted
     :param delete_after_download: Delete the file being converted after the conversion (youtube scraping)
+    :param youtube_item_path: directory where the youtube video will be saved
     """
     queue_item = queue_list.item(item_index)
 
@@ -188,7 +191,6 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
               "Exit Code:", ffre.exit_code,
               "Standard Out:", ffre.stdout,
               "Standard Error:", ffre.stderr)
-
 
 
 def videoName(link):

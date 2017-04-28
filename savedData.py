@@ -12,8 +12,8 @@ def updateUserData(loadDir="./", saveDir="./", vidFmt=None, audFmt=None):
         # if the save file contains the save and load directories, load them into the program
         initSaveDir = CurrentSaveData[0] if saveDir == "./" else saveDir
         initLoadDir = CurrentSaveData[1] if loadDir == "./" else loadDir
-        initVidFmt = CurrentSaveData[2] if vidFmt == None else vidFmt
-        initAudFmt = CurrentSaveData[3] if audFmt == None else audFmt
+        initVidFmt = CurrentSaveData[2] if vidFmt is None else vidFmt
+        initAudFmt = CurrentSaveData[3] if audFmt is None else audFmt
 
         # go back to the beginning of the file to overwrite
         f.seek(0)
@@ -22,4 +22,4 @@ def updateUserData(loadDir="./", saveDir="./", vidFmt=None, audFmt=None):
         f.truncate()
         f.close()
     # return the initial save directory to be placed in the textbox
-    return(initSaveDir, initVidFmt, initAudFmt)
+    return initSaveDir, initVidFmt, initAudFmt
