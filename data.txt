@@ -1,4 +1,4 @@
 /home/holtd/ffaudx
-/home/holtd/CodeScouts/pythonScripts/audioStreaming/
+/home/holtd/ffaudx/samples/
 mp4
-mp3
+wav

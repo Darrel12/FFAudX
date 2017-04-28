@@ -9,6 +9,7 @@ from tkinter import filedialog
 import ffmpy
 import inspect
 from EventFilters import clickable
+from time import sleep
 
 import savedData as sd
 from MyListWidget import *
@@ -90,8 +91,6 @@ class MyWindowClass(QMainWindow):
 
         # Manually set the progress bar range and create the thread that will run it
         self.ui.progress_bar.setRange(0, 100)
-        # self.conversion_task = TaskThreadObject(self.processQueue, self.ui.queue_list)
-        # self.conversion_task.progress.connect(self.onProgress)
 
         self.mainThread = QThread()
         self.mainThread.start()
@@ -99,10 +98,14 @@ class MyWindowClass(QMainWindow):
         self.conversion_task = TaskThread(self.processQueue, self.ui.queue_list)
         self.conversion_task.moveToThread(self.mainThread)
         self.conversion_task.notifyProgress.connect(self.progressBarGrowth)
+        self.conversion_task.revertButton.connect(self.revertButtonText)
 
         self.connect(self.conversion_task, SIGNAL('updateStatusBar'), self.updateStatus)
 
         pprint(MyListWidget.__mro__)
+
+    def revertButtonText(self):
+        self.ui.btn_convert.setText("Convert")
 
     def updateStatus(self, fName, video, audio):
         self.statusBar().showMessage(
@@ -220,13 +223,14 @@ class MyWindowClass(QMainWindow):
             print("Scraping:", queue_item.path)
             scrape(queue_list, queue_item)
         else:
-            self.convertItem(queue_list, item_index)
+            convertItem(queue_list, item_index)
 
 
 # subclassed QThread to run the conversion and monitor the progress - pretty sure doing this is wrong
 # but at least I'm not using moveToThread()
 class TaskThread(QThread):
     notifyProgress = pyqtSignal(int)
+    revertButton = pyqtSignal(str)
 
     def __init__(self, func, queue_list):
         super().__init__()
@@ -247,7 +251,7 @@ class TaskThread(QThread):
             if self._isRunning:
                 self.func(self.queue_list, 0)
                 self.notifyProgress.emit((i+1)/list_count * 100)  # current progress = completed / total jobs
-
+        self.revertButton.emit("Convert")
 
 
 if __name__ == "__main__":
