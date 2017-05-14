@@ -16,3 +16,6 @@ This application requires the following external packages:
 - pytube
 - ffmpy
 
+<hr>
+
+Note: If you have ZenHub you can look at the board for issue details and such
