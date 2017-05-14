@@ -1,7 +1,9 @@
-from os import remove
-import ffmpy
+from os import remove, system
+from ffmpy import FFmpeg, FFExecutableNotFoundError, FFRuntimeError
 from pytube import YouTube
 from pprint import pprint
+import subprocess
+import re
 
 import savedData as sd
 
@@ -93,23 +95,32 @@ def convertItem(queue_list, item_index, delete_after_download=False, youtube_ite
         # -y option forces overwrite of pre-existing output files - more at https://ffmpeg.org/ffmpeg.html
         # TODO: make this optional?
         # TODO: want to make m4a work? see http://stackoverflow.com/a/32932092/5812876
-        ff = ffmpy.FFmpeg(inputs=in_file_name, outputs=out_file_name, global_options="-y")
-        ff.run()
+        ff = FFmpeg(inputs=in_file_name, outputs=out_file_name, global_options="-y")
+        process = ff.run(stderr=subprocess.PIPE)[1].decode()
+        extract_time(process)
+        # out = ff.process.stderr.communicate()
         print("finished item: ", in_file_name)
         if delete_after_download:
             remove(youtube_item_path)  # removes the video from your hard drive after converting to the preferred format
         queue_list.takeItem(item_index)
 
-    except ffmpy.FFExecutableNotFoundError as ffenf:
+    except FFExecutableNotFoundError as ffenf:
         print("---The FFmpeg executable was not found---\n", ffenf)
 
-    except ffmpy.FFRuntimeError as ffre:
+    except FFRuntimeError as ffre:
         print("---Runtime Error---\n",
               "\nCommand:", ffre.cmd,
               "\nExit Code:", ffre.exit_code,
               "\nStandard Out:", ffre.stdout,
               "\nStandard Error:", ffre.stderr)
 
+
+def extract_duration(process):
+    print(re.search(r'Duration: .{11}', process, re.MULTILINE).group(0).split(" ")[1])
+
+
+def extract_time(process):
+    print(re.search(r'time=.{11}', process, re.MULTILINE).group(0).split("="))
 
 def videoName(link):
     print(link)

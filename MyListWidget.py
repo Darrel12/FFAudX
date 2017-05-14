@@ -1,9 +1,9 @@
-from PyQt4.QtGui import QAbstractItemView, QFrame, QListWidget, QListWidgetItem
-from PyQt4.QtCore import Qt
+from PyQt5.QtWidgets import QAbstractItemView, QFrame, QListWidget, QListWidgetItem
+from PyQt5.QtCore import Qt
 import os
 from mimetypes import MimeTypes
 from urllib import request
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 import savedData as sd
 from pytube import YouTube
 from pprint import pprint
@@ -125,7 +125,7 @@ class MyListWidget(QListWidget):
                     print("Youtube Video:", item)
                     self.addItem(item)
                 # make the item display its name
-                self.item(self.count() - 1).setText(item.fName)
+                self.item(self.count() - 1).setText(item.no_extension)
                 self.item(self.count() - 1).setSelected(True)
         else:
             # default internal drop

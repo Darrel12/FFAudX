@@ -1,4 +1,4 @@
-from PyQt4.QtCore import QEvent, QObject, pyqtSignal
+from PyQt5.QtCore import QEvent, QObject, pyqtSignal
 
 
 # Implement a custom event filter to allow non-clickable objects to have a signal for a click event #
